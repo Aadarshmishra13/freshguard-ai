@@ -1,120 +1,145 @@
 # FreshGuard AI
+### Multimodal Food Freshness Assessment and Spoilage Prediction
 
-### Machine Learning-Based Food Spoilage Prediction
+## Overview
 
-## 1. Project Overview
+FreshGuard AI is a machine learning-based platform designed to assess food freshness through image analysis and environmental storage data. It combines computer vision and traditional machine learning to provide complementary insights into food quality and spoilage.
 
-FreshGuard AI is a machine learning-based project designed to investigate and predict food spoilage using environmental storage conditions and food characteristics.
+The system consists of two independent prediction models:
 
-The system aims to classify food items into three categories: Fresh, Nearing Spoilage, and Spoiled. The prediction process considers storage temperature, relative humidity, storage duration, and food type.
+- **Vision Model:** Analyses food images and classifies freshness into Fresh, Nearing Spoilage and Spoiled categories.
+- **Environmental Model:** Analyses food type and storage conditions to predict whether food is Not Spoiled or Spoiled.
 
-The project combines exploratory data analysis, supervised machine learning, model evaluation, and an interactive web application to examine the relationship between storage conditions and food freshness.
+Both models are integrated into a Streamlit application, providing separate predictions, confidence scores and model explanations.
 
-## 2. Problem Statement
+## Model Architecture
 
-Food spoilage contributes to household food waste, economic losses, and potential food-safety concerns. Storage conditions, particularly temperature, humidity, and duration, can influence the rate at which food deteriorates.
+| Component | Vision Model | Environmental Model |
+|---|---|---|
+| Dataset | AgriFreshNET | IntelliStore |
+| Input | RGB food images | Structured storage data |
+| Approach | CNN and transfer learning | Supervised machine learning |
+| Algorithms | MobileNetV3, EfficientNet-B0 | Logistic Regression, Random Forest, XGBoost |
+| Output | 3 freshness classes | 2 spoilage classes |
 
-This project explores the application of machine learning to identify patterns in food-storage data and develop a classification model capable of estimating spoilage status.
-
-## 3. Project Objectives
-
-- Investigate the influence of storage conditions on food spoilage.
-- Identify suitable datasets containing food-storage and spoilage observations.
-- Develop a multiclass classification model.
-- Compare different machine learning algorithms.
-- Evaluate model performance using appropriate classification metrics.
-- Investigate the contribution of individual input features.
-- Develop an interactive application for spoilage prediction and data exploration.
-
-## 4. Input Features and Target Variable
-
-| Feature | Description |
-|---|---|
-| Food Type | Category of food being monitored |
-| Storage Temperature | Temperature during storage (°C) |
-| Relative Humidity | Relative humidity during storage (%) |
-| Storage Duration | Duration of storage |
-
-**Target variable:** Food spoilage status.
-
-**Classification categories:**
+**Vision model classes:**
 - Fresh
 - Nearing Spoilage
 - Spoiled
 
-## 5. Proposed Methodology
+**Environmental model classes:**
+- Not Spoiled
+- Spoiled
 
-The project will follow a structured machine learning workflow:
+The two models retain independent prediction outputs because they address different classification tasks.
 
-1. Dataset identification and provenance assessment.
-2. Data cleaning and quality assessment.
-3. Exploratory Data Analysis (EDA).
-4. Data preprocessing and feature engineering.
-5. Training and testing dataset preparation.
-6. Machine learning model development.
-7. Hyperparameter optimisation and model evaluation.
-8. Feature importance and model interpretability analysis.
-9. Integration of the selected model into a Streamlit application.
+## Datasets
 
-## 6. Technology Stack
+**1. AgriFreshNET – Primary Vision Dataset**
+
+- Approximately 14,500 RGB images.
+- 24 food categories.
+- Three freshness categories: Fresh, Semi-Fresh and Rotten.
+- Used for image-based freshness classification.
+
+Source: [Mendeley Data – AgriFreshNET](https://data.mendeley.com/datasets/42m5tb7yv9/1)
+
+**2. IntelliStore – Environmental Dataset**
+
+- 250 original observations.
+- 10 food categories.
+- Environmental measurements including temperature, humidity, storage duration and CO₂.
+- Binary spoilage target.
+
+Source: [Original Research Publication](https://onlinelibrary.wiley.com/doi/10.1002/itl2.402) | [Research Dataset](https://github.com/shivamsingha/aiot-food-storage/tree/main/datasets)
+
+**3. Controlled Freshness Sensing Study – Research Reference**
+
+An additional controlled freshness study is considered as a potential independent research benchmark, subject to data access.
+
+Source: [Research Publication](https://link.springer.com/article/10.1007/s42114-026-01834-3)
+
+## Technology Stack
 
 | Component | Technologies |
 |---|---|
-| Programming Language | Python |
+| Language | Python |
 | Data Processing | Pandas, NumPy |
-| Data Visualisation | Matplotlib, Seaborn, Plotly |
+| Image Processing | OpenCV, Pillow |
+| Visualisation | Matplotlib, Seaborn, Plotly |
+| Deep Learning | CNN, MobileNetV3, EfficientNet-B0 |
 | Machine Learning | Scikit-learn, XGBoost |
 | Explainable AI | SHAP, Permutation Importance |
-| Web Application | Streamlit |
+| Application | Streamlit |
 | Model Persistence | Joblib |
+| Development | Google Colab, Jupyter Notebook |
 | Version Control | Git, GitHub |
 
-## 7. Planned Application Features
+## Application Features
 
-The Streamlit application is intended to provide:
+- **Visual Freshness Assessment:** Image-based three-class freshness prediction.
+- **Storage Analysis:** Environmental-condition-based spoilage prediction.
+- **Explainable AI:** Model interpretation and feature importance.
+- **Food Inventory:** Food storage and shelf-life record management.
+- **Batch Analytics:** CSV-based batch predictions and reporting.
+- **Dashboard:** Centralised presentation of model outputs and analytics.
 
-- Interactive food spoilage prediction.
-- Food-storage condition analysis.
-- Model performance visualisation.
-- Explainable prediction insights.
-- Batch prediction through CSV uploads.
-- Food inventory monitoring.
-- Storage-condition scenario analysis.
-
-## 8. Repository Structure
+## Repository Structure
 
 ```text
 freshguard-ai/
 │
 ├── app/
+│   ├── Home.py
+│   └── pages/
+│
 ├── data/
 │   ├── raw/
 │   └── processed/
 │
 ├── models/
+│
 ├── notebooks/
+│   ├── 01_dataset_audit.ipynb
+│   ├── 02_image_eda.ipynb
+│   ├── 03_tabular_eda.ipynb
+│   ├── 04_vision_model.ipynb
+│   └── 05_environmental_model.ipynb
+│
 ├── reports/
 │   └── figures/
 │
 ├── src/
+│   ├── data/
+│   ├── preprocessing/
+│   ├── models/
+│   └── evaluation/
+│
 ├── tests/
 │
-├── README.md
-└── .gitignore
+├── requirements.txt
+├── .gitignore
+└── README.md
 ```
 
-## 9. Project Status
+## Model Evaluation
 
-**Development phase:** Initial setup and dataset investigation.
+Model performance will be assessed using appropriate classification metrics, including:
 
-Model training, performance evaluation, and application development are planned stages. Results will be documented after implementation and validation.
+- Accuracy
+- Precision, Recall and F1-score
+- Macro-F1 for multiclass evaluation
+- Confusion Matrix
+- ROC-AUC for binary classification, where applicable
 
-## 10. Limitations
+Class distribution, generalisation performance and potential data leakage will also be considered during evaluation.
 
-Predictions will depend on the quality, representativeness, and reliability of the underlying dataset.
+## Disclaimer
 
-The proposed system is an educational and research prototype. It is not intended to replace established food-safety guidelines, laboratory testing, or professional food-safety assessments.
+FreshGuard AI is an educational and research-oriented machine learning prototype. Model predictions are estimates based on available training data and should not be interpreted as definitive food-safety assessments or substitutes for established food-safety guidelines and professional evaluation.
 
-## 11. Author
+## Author
 
-Undergraduate project developed as part of a B.Tech programme in Bioinformatics with a specialisation in Artificial Intelligence and Machine Learning.
+**Aadarsh Mishra**
+
+Undergraduate Project – Bioinformatics | Artificial Intelligence and Machine Learning
